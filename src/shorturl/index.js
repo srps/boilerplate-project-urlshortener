@@ -3,18 +3,25 @@ import dns from 'dns';
 
 const validateUrl = (url) => {
   return new Promise((resolve, reject) => {
-    const uri = new URL(url);
     const errorMessage = `Invalid URL`;
-    if (!uri || !uri.protocol.match(/(https?)/) ) {
-      reject(errorMessage);
-    } else {
-      dns.lookup(uri.hostname, (err, address) => {
-        if (err) {
-          console.log(`DNS lookup error: ${err}`)
-          reject(errorMessage);
-        }
-        resolve(address);
-      });
+    try {
+      const uri = new URL(url);
+      if (!uri || !uri.protocol.match(/(https?)/)) {
+        reject(errorMessage);
+      } else {
+        dns.lookup(uri.hostname, (err, address) => {
+          if (err) {
+            console.log(`DNS lookup error: ${err}`)
+            reject(errorMessage);
+          }
+          resolve(address);
+        });
+      }
+    } catch (err) {
+      if (err.message.match(errorMessage)) {
+        reject(errorMessage);
+      }
+      throw err;
     }
   });
 }

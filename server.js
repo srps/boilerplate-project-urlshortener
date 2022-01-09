@@ -19,10 +19,8 @@ app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.route('/api/shorturl/:id')
-  .get(makeExpressCallback(getUrlController));
-
-app.route('/api/shorturl')
+app.route('/api/shorturl/:id?')
+  .get(makeExpressCallback(getUrlController))
   .post(makeExpressCallback(postUrlController));
 
 connectDB(app);

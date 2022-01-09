@@ -7,7 +7,7 @@ export default function makePostUrlController({ postUrl }) {
       const url = await postUrl({ original_url: httpRequest.body });
       return { body: { ...url } };
     } catch (err) {
-      throw err
+      throw err;
     }
   }
 }

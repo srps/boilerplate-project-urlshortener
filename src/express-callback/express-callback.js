@@ -12,7 +12,7 @@ export default function makeExpressCallback(controller) {
         })
         .catch(err => {
           console.log(`EC Error:- ${err}`);
-          if(err === "Invalid URL") {
+          if (err.match('Invalid URL')) {
             res.status(200).send({error: err})
           } else {
             res.status(500).send({error: err})  
@@ -20,11 +20,3 @@ export default function makeExpressCallback(controller) {
         });
       }
 }
-
-/*
-        req.method === 'GET' 
-          ? controller(httpRequest).then(({ body }) => { res.redirect(body.original_url) }).catch(sendErrorResponse)
-          : controller(urlInfo).then(({ body }) => { res.json(body) })
-            .catch(sendErrorResponse)
-    }
-*/
