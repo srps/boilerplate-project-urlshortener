@@ -1,3 +1,5 @@
+import cryptoRandomString from 'crypto-random-string';
+
 export default function makeUrlDb({ UrlDb }) {
   return Object.freeze({
     findById,
@@ -32,13 +34,26 @@ export default function makeUrlDb({ UrlDb }) {
   }
 
   async function insert({ original_url }) {
-    const url = new UrlDb({ original_url });
-    url.save()
-      .then(({ original_url }) => { original_url })
-      .catch(err => { throw new Error(err) });
-    return {
-      original_url: url.original_url,
-      short_url: url._id,
+
+    const generateNewId = async () => {
+      let generatedId = '';
+      while (!generatedId) {
+        let newId = cryptoRandomString({ length: 7, characters: 'alphanumeric' });
+        const url = await UrlDb.findById(newId).exec();
+        if (!url) { generatedId = newId };
+      }
+      return generatedId;
+    }
+    try {
+      const _id = await generateNewId();
+      const url = new UrlDb({ _id, original_url });
+      await url.save();
+      return {
+        original_url: url.original_url,
+        short_url: url._id,
+      }
+    } catch (err) {
+      throw new Error(err)
     }
   }
 }
