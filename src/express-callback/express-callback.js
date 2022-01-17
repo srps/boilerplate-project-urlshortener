@@ -12,10 +12,10 @@ export default function makeExpressCallback(controller) {
         })
         .catch(err => {
           console.log(`EC Error:- ${err}`);
-          if (err.match('Invalid URL')) {
-            res.status(200).send({error: err})
+          if (err.message.match('Invalid URL')) {
+            res.status(200).send({error: err.message})
           } else {
-            res.status(500).send({error: err})  
+            res.status(500).send({error: err.message})  
           }
         });
       }

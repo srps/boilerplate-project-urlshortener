@@ -1,5 +1,3 @@
-//import makeShorturl from '../shorturl/index.js';
-
 export default function makePostUrlController({ postUrl }) {
   // We'll get urlInfo from controller
   return async function postUrlController(httpRequest) {
